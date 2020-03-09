@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Northwind.Models;
 using Northwind.Controllers;
 using System.Web.Mvc;
+using System.Linq;
+using Northwind.Tests.Doubles;
 
 namespace Northwind.Tests
 {
@@ -14,7 +16,10 @@ namespace Northwind.Tests
         public void Test_Index_Return_View()
         {
             //1 arrange
-            CategoryController controller = new CategoryController();
+            
+            var Context = new FakeNorthwindContext();
+            CategoryController controller = new CategoryController(Context);
+
             //2 act
             var result = controller.Index() as ViewResult;
             //3
@@ -25,7 +30,13 @@ namespace Northwind.Tests
         public void Test_CategoryList_Model_Type()
         {
             //1 arrange
-            CategoryController controller = new CategoryController();
+            var Context = new FakeNorthwindContext();
+            Context.Categories = new[]
+            {
+                new Category(), new Category(), new Category(), new Category()
+            }.AsQueryable();
+
+            var controller = new CategoryController(Context);
 
             //2result
             var result = controller._CategoryList() as PartialViewResult;
@@ -38,7 +49,16 @@ namespace Northwind.Tests
         public void Test_GetIamge_ReturnType()
         {
             //1 arrange
-            CategoryController controller = new CategoryController();
+            var Context = new FakeNorthwindContext();
+            Context.Categories = new[]
+            {
+                new Category { CategoryID = 1, Picture = new byte[0] },
+                new Category { CategoryID = 2, Picture = new byte[0] },
+                new Category { CategoryID = 3, Picture = new byte[0] },
+                new Category { CategoryID = 4, Picture = new byte[0] }
+            }.AsQueryable();
+
+            var controller = new CategoryController(Context);
 
             //2 
             var result = controller.GetImage(1) as ActionResult;
@@ -53,7 +73,17 @@ namespace Northwind.Tests
         [TestMethod]
         public void Test_Display_Model_Type()
         {
-            var controller = new CategoryController();
+            var Context = new FakeNorthwindContext();
+            Context.Categories = new[]
+            {
+                new Category { CategoryID = 1 },
+                new Category { CategoryID = 2 },
+                new Category { CategoryID = 3 },
+                new Category { CategoryID = 4 }
+            }.AsQueryable();
+
+            var controller = new CategoryController(Context);
+
             var result = controller.Display(1) as ViewResult;
             Assert.AreEqual(typeof(Category),result.Model.GetType());
 

@@ -31,19 +31,30 @@ namespace Northwind.Controllers
             return View("Index");
         }
 
-        public PartialViewResult _CategoryList()
+        public PartialViewResult _CategoryList(int n = 0)
         {
+            List<Models.Category> Categories;
+            if (n == 0)
+            {
+                Categories = Context.Categories.ToList();
+            }
+            else
+            {
+                Categories = Context.Categories.Take(n).ToList();
+            }
+
             //Antes d implementar repositorio
             //List<Models.Category> Categories = new List<Models.Category>();
             //return PartialView("_CategoryList", Categories);
 
             //Implementado el repositorio 
-            List<Models.Category> Categories = Context.Categories.ToList();
+
             return PartialView("_CategoryList",Categories);
         }
 
         public ActionResult GetImage(int id)
         {
+          
             //Antes d implementar repositorio
             //byte[] Image = new byte[0];
             //return File(Image, "image/jpeg");

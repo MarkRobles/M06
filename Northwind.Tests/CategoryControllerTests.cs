@@ -88,5 +88,43 @@ namespace Northwind.Tests
             Assert.AreEqual(typeof(Category),result.Model.GetType());
 
         }
+
+
+        [TestMethod]
+        public void Test_CategoryList_No_Parameter()
+        {
+            var Context = new FakeNorthwindContext();
+
+            Context.Categories = new[]
+            {
+                 new Category(), new Category(), new Category(), new Category()
+            }.AsQueryable();
+
+            var controller = new CategoryController(Context);
+            var result = controller._CategoryList() as PartialViewResult;
+
+
+            var model = result.Model as IEnumerable<Category>;
+            Assert.AreEqual(4,model.Count());
+
+        }
+
+
+
+        [TestMethod]
+        public void Test_CategoryList_Int_Parameter()
+        {
+            var Context = new FakeNorthwindContext();
+            Context.Categories = new[]
+            {
+                   new Category(), new Category(), new Category(), new Category()
+            }.AsQueryable();
+
+            var controller = new CategoryController();
+
+            var result = controller._CategoryList(3) as PartialViewResult;
+            var model = result.Model as IEnumerable<Category>;
+            Assert.AreEqual(3, model.Count());
+        }
     }
 }

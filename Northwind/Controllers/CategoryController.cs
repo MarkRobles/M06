@@ -11,22 +11,25 @@ namespace Northwind.Controllers
         // GET: Category
         public ActionResult Index()
         {
-            return View();
+            return View("Index");
         }
 
         public PartialViewResult _CategoryList()
         {
-            throw new NotImplementedException();
+            List<Models.Category> Categories = new List<Models.Category>();
+            return PartialView("_CategoryList", Categories);
         }
 
         public ActionResult GetImage(int v)
         {
-            throw new NotImplementedException();
+            byte[] Image = new byte[0];
+            return File(Image, "image/jpeg");
         }
 
-        public ViewResult Display(int v)
+        public ViewResult Display(int id)
         {
-            throw new NotImplementedException();
+            var Category = new Models.Category();
+            return View(Category);
         }
     }
 }

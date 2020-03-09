@@ -68,13 +68,57 @@ namespace Northwind.Controllers
 
         public ActionResult Display(int id)
         {
+          Category  Category = null;
+            ActionResult Result = null;
+
+            if (id <= 0) {
+                throw (new ArgumentException("El ID debe ser mayor que cero"));
+                    }
+            try
+            {
+                //Implementado el repositorio 
+                Category = Context.FindCategoryByID(id);
+                Result = View("Display", Category);
+            }
+            catch(Exceptions.CategoryNotFoundExeption ex)
+            {
+                var Model = new HandleErrorInfo(ex, "Category", "Display");
+                Result = View("Error", Model);
+            }
+
             //Antes d implementar repositorio
             //var Category = new Models.Category();
             //return View(Category);
 
-            //Implementado el repositorio 
-            var Category = Context.FindCategoryByID(id);
-            return Category == null ? HttpNotFound() as ActionResult : View("Display", Category);
+            return Result;
+         
         }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+          if(filterContext.Exception is ArgumentException)
+            {
+                var ControllerName =
+                    filterContext.RouteData.Values["Controller"].ToString();
+                var ActionName =
+                    filterContext.RouteData.Values["Action"].ToString();
+                var Model =
+                    new HandleErrorInfo(filterContext.Exception, ControllerName, ActionName);
+
+                var Result = new ViewResult
+                {
+                    ViewName = "Error",
+                    ViewData = new ViewDataDictionary<HandleErrorInfo>(Model),
+                    TempData = filterContext.Controller.TempData
+                  
+            };
+                filterContext.Result = Result;
+                filterContext.ExceptionHandled = true;
+            }
+
+           
+         
+        }
+
     }
 }

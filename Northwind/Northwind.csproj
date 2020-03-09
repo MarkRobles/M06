@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Exceptions\CategoryNotFoundExeption.cs" />
+    <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -154,6 +156,7 @@
     <Content Include="Views\Category\Display.cshtml" />
     <Content Include="Views\Shared\_CategoryList.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

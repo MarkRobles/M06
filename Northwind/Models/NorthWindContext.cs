@@ -32,7 +32,12 @@ namespace Northwind.Models
 
         public Category FindCategoryByID(int ID)
         {
-            return Context.Categories.Find(ID);
+            var Category = Context.Categories.Find(ID);
+            if(Category==null)
+            {
+                throw (new Exceptions.CategoryNotFoundExeption(ID));
+            }
+            return Category;
         }
 
         public Product FindProductByID(int ID)
